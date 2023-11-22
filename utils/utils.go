@@ -1,4 +1,4 @@
-package main
+package utils
 
 import (
 	"encoding/json"
@@ -9,6 +9,7 @@ import (
 )
 
 var (
+	DefaultServerUrl = "http://localhost:6756"
 	configPath = getConfigPath()
 )
 

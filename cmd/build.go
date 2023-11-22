@@ -4,11 +4,19 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
+	"bytes"
 	"fmt"
+	"io"
+	"net/http"
+	"os"
+
 	// "net/http"
 
+	tr "github.com/dethancosta/tr-cli/utils"
 	"github.com/spf13/cobra"
 )
+
+var buildPath string
 
 // buildCmd represents the build command
 var buildCmd = &cobra.Command{
@@ -22,20 +30,53 @@ The start and end times are in the format HH:MM:SS. The tag is optional,
 but the last comma is required. The description cannot be empty.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("build called")
-		// resp, err := http.Post()
+		return
+		// TODO fix and test
+		var buf bytes.Buffer
+
+		var ok bool
+		config := tr.GetConfig()
+		serverUrl, ok := config["server"]
+		if !ok {
+			serverUrl = tr.DefaultServerUrl
+		}
+		if buildPath != "" {
+			if buildPath, ok = config["build"]; !ok {
+				fmt.Println("No build file specified in config file or as argument.")
+			os.Exit(1)
+			}
+		}
+
+		f, err := os.Open(buildPath)
+		if err != nil {
+			fmt.Println("Error opening build file:", err)
+			os.Exit(1)
+		}
+		defer f.Close()
+		contents, err := io.ReadAll(f)
+		if err != nil {
+			fmt.Println("Error reading build file:", err)
+			os.Exit(1)
+		}
+		buf = *bytes.NewBuffer(contents)
+
+		resp, err := http.Post(serverUrl+"/build", "multipart/form-data", &buf)
+		if err != nil {
+			fmt.Println("Error sending build file:", err)
+			os.Exit(1)
+		}
+		defer resp.Body.Close()
+		if resp.StatusCode != 200 {
+			fmt.Println("Error sending build file:", resp.Status)
+			os.Exit(1)
+		}
+		fmt.Println("Build file sent successfully.")
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(buildCmd)
 
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// buildCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// buildCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// flags
+	buildCmd.Flags().StringVarP(&buildPath, "file", "f", "", "Path to build file")
 }
