@@ -1,11 +1,11 @@
 /*
 Copyright © 2023 NAME HERE <EMAIL ADDRESS>
-
 */
 package cmd
 
 import (
 	"fmt"
+	// "net/http"
 
 	"github.com/spf13/cobra"
 )
@@ -13,15 +13,16 @@ import (
 // buildCmd represents the build command
 var buildCmd = &cobra.Command{
 	Use:   "build",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Send a build file to the server to start today's schedule",
+	Long: `Send a request to the server to build today's schudule
+with the build file specified in the config file. The build file
+is a csv file with the following format, where each line is a task:
+<description>,<start time>,<end time>,<tag>
+The start and end times are in the format HH:MM:SS. The tag is optional,
+but the last comma is required. The description cannot be empty.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("build called")
+		// resp, err := http.Post()
 	},
 }
 

@@ -13,13 +13,8 @@ import (
 // getScheduleCmd represents the getSchedule command
 var getScheduleCmd = &cobra.Command{
 	Use:   "getSchedule",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Get today's schedule",
+	Long: `Send a request to the timeruler server to get today's schedule as a formatted string.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("getSchedule called")
 	},
