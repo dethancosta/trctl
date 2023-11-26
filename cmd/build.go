@@ -7,6 +7,7 @@ import (
 	"bytes"
 	"fmt"
 	"io"
+	"mime/multipart"
 	"net/http"
 	"os"
 
@@ -30,9 +31,6 @@ The start and end times are in the format HH:MM:SS. The tag is optional,
 but the last comma is required. The description cannot be empty.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("build called")
-		return
-		// TODO fix and test
-		var buf bytes.Buffer
 
 		var ok bool
 		config := tr.GetConfig()
@@ -40,7 +38,7 @@ but the last comma is required. The description cannot be empty.`,
 		if !ok {
 			serverUrl = tr.DefaultServerUrl
 		}
-		if buildPath != "" {
+		if buildPath == "" {
 			if buildPath, ok = config["build"]; !ok {
 				fmt.Println("No build file specified in config file or as argument.")
 			os.Exit(1)
@@ -53,21 +51,33 @@ but the last comma is required. The description cannot be empty.`,
 			os.Exit(1)
 		}
 		defer f.Close()
-		contents, err := io.ReadAll(f)
+
+		body := &bytes.Buffer{}
+		writer := multipart.NewWriter(body)
+		fileWriter, err := writer.CreateFormFile("buildFile", buildPath)
 		if err != nil {
 			fmt.Println("Error reading build file:", err)
 			os.Exit(1)
 		}
-		buf = *bytes.NewBuffer(contents)
 
-		resp, err := http.Post(serverUrl+"/build", "multipart/form-data", &buf)
+		_, err = io.Copy(fileWriter, f)
 		if err != nil {
-			fmt.Println("Error sending build file:", err)
+			fmt.Println("Error reading build file:", err)
 			os.Exit(1)
 		}
-		defer resp.Body.Close()
+		writer.Close()
+
+		req, err := http.NewRequest("POST", serverUrl + "/build", body)
+		if err != nil {
+			fmt.Println("Error building request: ", err)
+			os.Exit(1)
+		}
+		req.Header.Set("Content-Type", writer.FormDataContentType())
+
+		resp, err := (&http.Client{}).Do(req)
+
 		if resp.StatusCode != 200 {
-			fmt.Println("Error sending build file:", resp.Status)
+			fmt.Printf("Error sending build file: Response Code '%s': %s\n", resp.Status, err)
 			os.Exit(1)
 		}
 		fmt.Println("Build file sent successfully.")

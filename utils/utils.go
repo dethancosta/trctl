@@ -9,7 +9,7 @@ import (
 )
 
 var (
-	DefaultServerUrl = "http://localhost:6756"
+	DefaultServerUrl = "http://localhost:6576"
 	configPath = getConfigPath()
 )
 

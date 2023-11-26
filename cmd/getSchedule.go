@@ -1,11 +1,13 @@
 /*
 Copyright © 2023 NAME HERE <EMAIL ADDRESS>
-
 */
 package cmd
 
 import (
+	"encoding/json"
 	"fmt"
+	"net/http"
+	"os"
 
 	"github.com/spf13/cobra"
 )
@@ -17,19 +19,36 @@ var getScheduleCmd = &cobra.Command{
 	Long: `Send a request to the timeruler server to get today's schedule as a formatted string.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("getSchedule called")
+
+		// TODO use address from config, then fallback to default
+		resp, err := http.Get("http://localhost:6576/get")
+		if err != nil {
+			fmt.Println("Error getting schedule: ", err)
+			os.Exit(1)
+		}
+		defer resp.Body.Close()
+
+		if resp.StatusCode == http.StatusNotFound {
+			fmt.Println("No schedule set")
+			return
+		} else if resp.StatusCode != http.StatusOK {
+			fmt.Println("Error getting schedule: ", resp.Status)
+			os.Exit(1)
+		}
+
+		var schedule map[string]string
+
+		err = json.NewDecoder(resp.Body).Decode(&schedule)
+
+		if err != nil {
+			fmt.Println("Error parsing schedule: ", err)
+			os.Exit(1)
+		}
+
+		fmt.Println("--- Schedule ---\n" + schedule["Schedule"])
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(getScheduleCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// getScheduleCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// getScheduleCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
