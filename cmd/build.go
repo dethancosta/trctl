@@ -30,8 +30,6 @@ is a csv file with the following format, where each line is a task:
 The start and end times are in the format HH:MM:SS. The tag is optional,
 but the last comma is required. The description cannot be empty.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("build called")
-
 		var ok bool
 		config := tr.GetConfig()
 		serverUrl, ok := config["server"]
