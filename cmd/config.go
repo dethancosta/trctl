@@ -14,8 +14,8 @@ import (
 )
 
 var (
-	user string
-	password string
+	user      string
+	password  string
 	serverUrl string
 	buildFile string
 )
@@ -27,7 +27,6 @@ var configCmd = &cobra.Command{
 	Long: `Update variables in the configuration file:
 	config -u <username> -p <password> -s <server>`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("config called")
 		scope := gap.NewScope(gap.User, "timeruler")
 		configPath, err := scope.ConfigPath("config.json")
 		if err != nil {

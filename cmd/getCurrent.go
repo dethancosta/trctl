@@ -17,7 +17,7 @@ import (
 var getCurrentCmd = &cobra.Command{
 	Use:   "getCurrent",
 	Short: "Get the current task",
-	Long: `Send a request to the server to get the current task.`,
+	Long:  `Send a request to the server to get the current task.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		serverUrl, ok := tr.GetConfig()["server"]
 		if !ok {
@@ -39,10 +39,10 @@ var getCurrentCmd = &cobra.Command{
 			return
 		}
 
-		var task map[string]struct{
+		var task map[string]struct {
 			Description string `json:"Description"`
-			Tag string `json:"Tag"`
-			Until string `json:"Until"`
+			Tag         string `json:"Tag"`
+			Until       string `json:"Until"`
 		}
 
 		err = json.NewDecoder(resp.Body).Decode(&task)
@@ -60,14 +60,4 @@ var getCurrentCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(getCurrentCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// getCurrentCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// getCurrentCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

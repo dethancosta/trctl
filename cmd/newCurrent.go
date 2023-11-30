@@ -20,8 +20,6 @@ var newCurrentCmd = &cobra.Command{
 	Long: `Send a request to the timeruler server to update the 
 current task until a given time.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("newCurrent called")
-
 		config := tr.GetConfig()
 		serverUrl, ok := config["serverUrl"]
 		if !ok {
@@ -34,14 +32,14 @@ current task until a given time.`,
 			fmt.Println("Error: until (-u) is required")
 			return
 		}
-		task := struct{
-			Desc string `json:"Description"`
+		task := struct {
+			Desc  string `json:"Description"`
 			Until string `json:"Until"`
-			Tag string `json:"Tag"`
+			Tag   string `json:"Tag"`
 		}{
-			Desc: desc,
+			Desc:  desc,
 			Until: until,
-			Tag: tag,
+			Tag:   tag,
 		}
 		req, err := json.Marshal(task)
 		if err != nil {
@@ -50,7 +48,7 @@ current task until a given time.`,
 		}
 
 		resp, err := http.Post(
-			serverUrl + "/change_current",
+			serverUrl+"/change_current",
 			"application/json",
 			bytes.NewBuffer(req),
 		)
@@ -68,9 +66,9 @@ current task until a given time.`,
 }
 
 var (
-	desc string
+	desc  string
 	until string
-	tag string
+	tag   string
 )
 
 func init() {

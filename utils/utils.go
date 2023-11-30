@@ -10,7 +10,7 @@ import (
 
 var (
 	DefaultServerUrl = "http://localhost:6576"
-	configPath = getConfigPath()
+	configPath       = getConfigPath()
 )
 
 func GetConfig() map[string]string {

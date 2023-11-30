@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"os"
 
+	tr "github.com/dethancosta/tr-cli/utils"
 	"github.com/spf13/cobra"
 )
 
@@ -16,12 +17,13 @@ import (
 var getScheduleCmd = &cobra.Command{
 	Use:   "getSchedule",
 	Short: "Get today's schedule",
-	Long: `Send a request to the timeruler server to get today's schedule as a formatted string.`,
+	Long:  `Send a request to the timeruler server to get today's schedule as a formatted string.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("getSchedule called")
-
-		// TODO use address from config, then fallback to default
-		resp, err := http.Get("http://localhost:6576/get")
+		serverUrl, ok := tr.GetConfig()["server"]
+		if !ok {
+			serverUrl = tr.DefaultServerUrl
+		}
+		resp, err := http.Get(serverUrl + "/get")
 		if err != nil {
 			fmt.Println("Error getting schedule: ", err)
 			os.Exit(1)

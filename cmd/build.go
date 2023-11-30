@@ -39,7 +39,7 @@ but the last comma is required. The description cannot be empty.`,
 		if buildPath == "" {
 			if buildPath, ok = config["build"]; !ok {
 				fmt.Println("No build file specified in config file or as argument.")
-			os.Exit(1)
+				os.Exit(1)
 			}
 		}
 
@@ -65,7 +65,7 @@ but the last comma is required. The description cannot be empty.`,
 		}
 		writer.Close()
 
-		req, err := http.NewRequest("POST", serverUrl + "/build", body)
+		req, err := http.NewRequest("POST", serverUrl+"/build", body)
 		if err != nil {
 			fmt.Println("Error building request: ", err)
 			os.Exit(1)
