@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"strings"
 
 	tr "github.com/dethancosta/tr-cli/utils"
 	"github.com/spf13/cobra"
@@ -47,7 +48,8 @@ var getScheduleCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		fmt.Println("--- Schedule ---\n" + schedule["Schedule"])
+		title := "--- Schedule ---"
+		fmt.Println(title + "\n" + schedule["Schedule"] + strings.Repeat("-", len(title)))
 	},
 }
 
