@@ -5,6 +5,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"os"
 	"strings"
@@ -21,9 +22,6 @@ var updateCmd = &cobra.Command{
 	Long: `Send a request to the timeruler server to update one or more
 given tasks`,
 	Run: func(cmd *cobra.Command, args []string) {
-		// TODO delete this line
-		fmt.Println("update called")
-
 		// TODO test
 		config := tr.GetConfig()
 		serverUrl, ok := config["serverUrl"]
@@ -106,6 +104,8 @@ given tasks`,
 		defer resp.Body.Close()
 		if resp.StatusCode != 200 {
 			fmt.Println("Error: ", resp.Status)
+			body, _ := ioutil.ReadAll(resp.Body)
+			fmt.Println("Body: ", string(body))
 			return
 		}
 		fmt.Println("Schedule updated")
