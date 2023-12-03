@@ -13,13 +13,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var (
-	user      string
-	password  string
-	serverUrl string
-	buildFile string
-)
-
 // configCmd represents the config command
 var configCmd = &cobra.Command{
 	Use:   "config",
@@ -30,12 +23,12 @@ var configCmd = &cobra.Command{
 		scope := gap.NewScope(gap.User, "timeruler")
 		configPath, err := scope.ConfigPath("config.json")
 		if err != nil {
-			fmt.Println("Error getting config path")
+			fmt.Println("Error getting config path: ", err.Error())
 			os.Exit(1)
 		}
 		configFile, err := os.OpenFile(configPath, os.O_RDWR, 0644)
 		if err != nil {
-			fmt.Println("Error opening config file")
+			fmt.Println("Error opening config file: ", err.Error())
 			os.Exit(1)
 		}
 		configBytes, err := io.ReadAll(configFile)
@@ -44,7 +37,7 @@ var configCmd = &cobra.Command{
 		var config map[string]string
 		err = json.Unmarshal(configBytes, &config)
 		if err != nil {
-			fmt.Println("Error reading config file")
+			fmt.Println("Error reading config file: ", err.Error())
 			os.Exit(1)
 		}
 
@@ -71,19 +64,19 @@ var configCmd = &cobra.Command{
 
 		configBytes, err = json.Marshal(config)
 		if err != nil {
-			fmt.Println("Error marshalling config")
+			fmt.Println("Error marshalling config: ", err.Error())
 			os.Exit(1)
 		}
 
 		configFile, err = os.OpenFile(configPath, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0644)
 		if err != nil {
-			fmt.Println("Error opening config file")
+			fmt.Println("Error opening config file: ", err.Error())
 			os.Exit(1)
 		}
 		defer configFile.Close()
 		_, err = configFile.Write(configBytes)
 		if err != nil {
-			fmt.Println("Error writing to config file")
+			fmt.Println("Error writing to config file: ", err.Error())
 			os.Exit(1)
 		}
 	},
@@ -91,13 +84,4 @@ var configCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(configCmd)
-
-	// persistent flags
-	configCmd.PersistentFlags().StringVarP(&serverUrl, "server", "s", "", "Remote server address")
-	configCmd.PersistentFlags().StringVarP(&user, "user", "u", "", "Username for a remote server")
-	configCmd.PersistentFlags().StringVarP(&password, "password", "p", "", "Password for a remote server")
-	configCmd.MarkFlagsRequiredTogether("user", "password")
-
-	// local flags
-	configCmd.Flags().StringVarP(&buildFile, "build", "b", "", "Path to the build file")
 }

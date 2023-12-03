@@ -1,6 +1,3 @@
-/*
-Copyright © 2023 NAME HERE <EMAIL ADDRESS>
-*/
 package cmd
 
 import (
@@ -15,14 +12,17 @@ var rootCmd = &cobra.Command{
 	Short: "CLI client for a timeruler server",
 	Long: `tr-cli is a CLI client for a timeruler server. It is used to
 get, update, and build schedules.`,
-
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-	// Run: func(cmd *cobra.Command, args []string) { },
 }
 
-// Execute adds all child commands to the root command and sets flags appropriately.
-// This is called by main.main(). It only needs to happen once to the rootCmd.
+var (
+	user string
+	password string
+	serverUrl string
+	buildFile string
+
+	err error
+)
+
 func Execute() {
 	err := rootCmd.Execute()
 	if err != nil {
@@ -31,4 +31,10 @@ func Execute() {
 }
 
 func init() {
+	rootCmd.PersistentFlags().StringVarP(&serverUrl, "server", "s", "", "Remote server address")
+	rootCmd.PersistentFlags().StringVarP(&user, "user", "u", "", "Username for a remote server")
+	rootCmd.PersistentFlags().StringVarP(&password, "password", "p", "", "Password for a remote server")
+	rootCmd.MarkFlagsRequiredTogether("user", "password")
+
+	rootCmd.PersistentFlags().StringVarP(&buildFile, "build", "b", "", "Path to the build file")
 }

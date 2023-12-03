@@ -4,3 +4,7 @@ testCore:
 
 testUpdate:
 	go run main.go update -f ~/Developer/tr-cli/test/update.csv
+
+testInit:
+	#rm ~/.timeruler/config.json
+	go run main.go init -u "User" -p "PAssword" -s "localhost:69" -b "buildybuild.csv"

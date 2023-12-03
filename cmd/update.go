@@ -5,7 +5,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"os"
 	"strings"
@@ -104,7 +104,7 @@ given tasks`,
 		defer resp.Body.Close()
 		if resp.StatusCode != 200 {
 			fmt.Println("Error: ", resp.Status)
-			body, _ := ioutil.ReadAll(resp.Body)
+			body, _ := io.ReadAll(resp.Body)
 			fmt.Println("Body: ", string(body))
 			return
 		}
@@ -120,6 +120,13 @@ given tasks`,
 var filename string
 
 func init() {
+	updateCmd.SetHelpFunc(func(command *cobra.Command, strings []string) {
+		command.Flags().MarkHidden("server")
+		command.Flags().MarkHidden("user")
+		command.Flags().MarkHidden("password")
+		command.Flags().MarkHidden("build")
+		command.Parent().HelpFunc()(command, strings)
+	})
 	rootCmd.AddCommand(updateCmd)
 
 	updateCmd.Flags().StringVarP(&filename, "file", "f", "", "File with new tasks")

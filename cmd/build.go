@@ -1,6 +1,3 @@
-/*
-Copyright © 2023 NAME HERE <EMAIL ADDRESS>
-*/
 package cmd
 
 import (
@@ -11,15 +8,10 @@ import (
 	"net/http"
 	"os"
 
-	// "net/http"
-
 	tr "github.com/dethancosta/tr-cli/utils"
 	"github.com/spf13/cobra"
 )
 
-var buildPath string
-
-// buildCmd represents the build command
 var buildCmd = &cobra.Command{
 	Use:   "build",
 	Short: "Send a build file to the server to start today's schedule",
@@ -36,14 +28,14 @@ but the last comma is required. The description cannot be empty.`,
 		if !ok {
 			serverUrl = tr.DefaultServerUrl
 		}
-		if buildPath == "" {
-			if buildPath, ok = config["build"]; !ok {
+		if buildFile == "" {
+			if buildFile, ok = config["build"]; !ok {
 				fmt.Println("No build file specified in config file or as argument.")
 				os.Exit(1)
 			}
 		}
 
-		f, err := os.Open(buildPath)
+		f, err := os.Open(buildFile)
 		if err != nil {
 			fmt.Println("Error opening build file:", err)
 			os.Exit(1)
@@ -52,7 +44,7 @@ but the last comma is required. The description cannot be empty.`,
 
 		body := &bytes.Buffer{}
 		writer := multipart.NewWriter(body)
-		fileWriter, err := writer.CreateFormFile("buildFile", buildPath)
+		fileWriter, err := writer.CreateFormFile("buildFile", buildFile)
 		if err != nil {
 			fmt.Println("Error reading build file:", err)
 			os.Exit(1)
@@ -83,8 +75,11 @@ but the last comma is required. The description cannot be empty.`,
 }
 
 func init() {
+	buildCmd.SetHelpFunc(func(command *cobra.Command, strings []string) {
+		command.Flags().MarkHidden("server")
+		command.Flags().MarkHidden("user")
+		command.Flags().MarkHidden("password")
+		command.Parent().HelpFunc()(command, strings)
+	})
 	rootCmd.AddCommand(buildCmd)
-
-	// flags
-	buildCmd.Flags().StringVarP(&buildPath, "file", "f", "", "Path to build file")
 }

@@ -1,6 +1,3 @@
-/*
-Copyright © 2023 NAME HERE <EMAIL ADDRESS>
-*/
 package cmd
 
 import (
@@ -14,7 +11,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// getScheduleCmd represents the getSchedule command
 var getScheduleCmd = &cobra.Command{
 	Use:   "getSchedule",
 	Short: "Get today's schedule",
@@ -54,5 +50,12 @@ var getScheduleCmd = &cobra.Command{
 }
 
 func init() {
+	getScheduleCmd.SetHelpFunc(func(command *cobra.Command, strings []string) {
+		command.Flags().MarkHidden("server")
+		command.Flags().MarkHidden("user")
+		command.Flags().MarkHidden("password")
+		command.Flags().MarkHidden("build")
+		command.Parent().HelpFunc()(command, strings)
+	})
 	rootCmd.AddCommand(getScheduleCmd)
 }

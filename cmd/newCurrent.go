@@ -72,6 +72,13 @@ var (
 )
 
 func init() {
+	newCurrentCmd.SetHelpFunc(func(command *cobra.Command, strings []string) {
+		command.Flags().MarkHidden("server")
+		command.Flags().MarkHidden("user")
+		command.Flags().MarkHidden("password")
+		command.Flags().MarkHidden("build")
+		command.Parent().HelpFunc()(command, strings)
+	})
 	rootCmd.AddCommand(newCurrentCmd)
 
 	newCurrentCmd.Flags().StringVarP(&desc, "desc", "d", "", "Task description")

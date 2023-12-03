@@ -16,7 +16,7 @@ import (
 
 var (
 	DefaultServerUrl = "http://localhost:6576"
-	configPath       = getConfigPath()
+	configPath       = GetConfigPath()
 )
 
 func GetConfig() map[string]string {
@@ -41,13 +41,22 @@ func GetConfig() map[string]string {
 	return config
 }
 
-func getConfigPath() string {
+func GetConfigPath() string {
 	configPath, err := gap.NewScope(gap.User, "timeruler").ConfigPath("config.json")
 	if err != nil {
 		return ""
 	}
 
 	return configPath
+}
+
+func GetConfigDir() string {
+	configDir, err := gap.NewScope(gap.User, "timeruler").ConfigPath("")
+	if err != nil {
+		return ""
+	}
+
+	return configDir
 }
 
 type Task struct {
