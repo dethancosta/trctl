@@ -65,6 +65,10 @@ but the last comma is required. The description cannot be empty.`,
 		req.Header.Set("Content-Type", writer.FormDataContentType())
 
 		resp, err := (&http.Client{}).Do(req)
+		if err != nil {
+			fmt.Println("Couldn't send request: ", err.Error())
+			os.Exit(1)
+		}
 
 		if resp.StatusCode != 200 {
 			fmt.Printf("Error sending build file: Response Code '%s': %s\n", resp.Status, err)
