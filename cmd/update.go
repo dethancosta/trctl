@@ -24,7 +24,7 @@ given tasks`,
 	Run: func(cmd *cobra.Command, args []string) {
 		// TODO test
 		config := tr.GetConfig()
-		serverUrl, ok := config["serverUrl"]
+		serverUrl, ok := config["server"]
 		if !ok {
 			serverUrl = tr.DefaultServerUrl
 		}
@@ -41,6 +41,7 @@ given tasks`,
 			// TODO get tasks from stdin
 			fmt.Println("Give up to 16 tasks ('done' + Enter to finish):")
 			input := bufio.NewReader(os.Stdin)
+			now := time.Now()
 			for i := 1; i <= 16; i++ {
 				fmt.Printf("--Task %d--\n", i)
 				fmt.Printf("Description: ")
@@ -52,26 +53,33 @@ given tasks`,
 					break
 				}
 				desc = strings.TrimSuffix(desc, "\n")
+				fmt.Printf("Start Time (hh:mm:ss): ")
 				startStr, err := input.ReadString('\n')
 				startStr = strings.TrimSuffix(startStr, "\n")
 				if err != nil {
 					fmt.Println("Error reading input: ", err.Error())
 					os.Exit(1)
 				}
-				start, err := time.Parse(startStr, time.TimeOnly)
+				start, err := time.Parse(time.TimeOnly, startStr)
+				start = time.Date(now.Year(), now.Month(), now.Day(), start.Hour(), start.Minute(), 0, 0, time.Local)
 				if err != nil {
 					fmt.Println("Couldn't parse time: ", err.Error())
+					os.Exit(1)
 				}
+				fmt.Printf("End Time (hh:mm:ss): ")
 				endStr, err := input.ReadString('\n')
 				endStr = strings.TrimSuffix(endStr, "\n")
 				if err != nil {
 					fmt.Println("Error reading input: ", err.Error())
 					os.Exit(1)
 				}
-				end, err := time.Parse(endStr, time.TimeOnly)
+				end, err := time.Parse(time.TimeOnly, endStr)
 				if err != nil {
 					fmt.Println("Couldn't parse time: ", err.Error())
+					os.Exit(1)
 				}
+				end = time.Date(now.Year(), now.Month(), now.Day(), end.Hour(), end.Minute(), 0, 0, time.Local)
+				fmt.Printf("Tag: ")
 				tag, err := input.ReadString('\n')
 				tag = strings.TrimSuffix(tag, "\n")
 				if err != nil {

@@ -21,7 +21,7 @@ var newCurrentCmd = &cobra.Command{
 current task until a given time.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		config := tr.GetConfig()
-		serverUrl, ok := config["serverUrl"]
+		serverUrl, ok := config["server"]
 		if !ok {
 			serverUrl = tr.DefaultServerUrl
 		}
@@ -82,6 +82,6 @@ func init() {
 	rootCmd.AddCommand(newCurrentCmd)
 
 	newCurrentCmd.Flags().StringVarP(&desc, "desc", "d", "", "Task description")
-	newCurrentCmd.Flags().StringVarP(&until, "until", "u", "", "Task end time")
+	newCurrentCmd.Flags().StringVarP(&until, "end", "e", "", "Task end time")
 	newCurrentCmd.Flags().StringVarP(&tag, "tag", "t", "", "Task tag")
 }
