@@ -1,4 +1,4 @@
-module github.com/dethancosta/tr-cli
+module github.com/dethancosta/trctl
 
 go 1.21.0
 

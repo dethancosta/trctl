@@ -7,8 +7,8 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"strings"
 	"strconv"
+	"strings"
 	"syscall"
 	"time"
 
@@ -94,10 +94,10 @@ func GetConfigDir() string {
 }
 
 type Task struct {
-	Description string `json:"Description"`
-	StartTime time.Time `json:"Start"`
-	EndTime time.Time `json:"End"`
-	Tag string `json:"Tag"`
+	Description string    `json:"Description"`
+	StartTime   time.Time `json:"Start"`
+	EndTime     time.Time `json:"End"`
+	Tag         string    `json:"Tag"`
 }
 
 func TasksFromCsv(filename string) ([]Task, error) {
@@ -143,11 +143,11 @@ func TasksFromCsv(filename string) ([]Task, error) {
 		if len(tag) > 0 {
 			task = Task{
 				Description: desc,
-				StartTime: start,
-				EndTime: end,
-				Tag: tag,
+				StartTime:   start,
+				EndTime:     end,
+				Tag:         tag,
 			}
-		} 
+		}
 		if task.Description == "" {
 			return nil, errors.New("Error creating tasks: Task could not be created on line " + strconv.Itoa(lc))
 		}

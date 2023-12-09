@@ -1,6 +1,3 @@
-/*
-Copyright © 2023 NAME HERE <EMAIL ADDRESS>
-*/
 package cmd
 
 import (
@@ -9,11 +6,10 @@ import (
 	"net/http"
 	"os"
 
-	tr "github.com/dethancosta/tr-cli/utils"
+	tr "github.com/dethancosta/trctl/utils"
 	"github.com/spf13/cobra"
 )
 
-// getCurrentCmd represents the getCurrent command
 var getCurrentCmd = &cobra.Command{
 	Use:   "getCurrent",
 	Short: "Get the current task",
@@ -60,11 +56,11 @@ var getCurrentCmd = &cobra.Command{
 
 func init() {
 	getCurrentCmd.SetHelpFunc(func(command *cobra.Command, strings []string) {
-	   command.Flags().MarkHidden("server")
-	   command.Flags().MarkHidden("user")
-	   command.Flags().MarkHidden("password")
-	   command.Flags().MarkHidden("build")
-	    command.Parent().HelpFunc()(command, strings)
+		command.Flags().MarkHidden("server")
+		command.Flags().MarkHidden("user")
+		command.Flags().MarkHidden("password")
+		command.Flags().MarkHidden("build")
+		command.Parent().HelpFunc()(command, strings)
 	})
 	rootCmd.AddCommand(getCurrentCmd)
 }

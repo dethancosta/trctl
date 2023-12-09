@@ -1,6 +1,3 @@
-/*
-Copyright © 2023 NAME HERE <EMAIL ADDRESS>
-*/
 package cmd
 
 import (
@@ -9,11 +6,10 @@ import (
 	"fmt"
 	"net/http"
 
-	tr "github.com/dethancosta/tr-cli/utils"
+	tr "github.com/dethancosta/trctl/utils"
 	"github.com/spf13/cobra"
 )
 
-// newCurrentCmd represents the newCurrent command
 var newCurrentCmd = &cobra.Command{
 	Use:   "newCurrent",
 	Short: "Update the current task",

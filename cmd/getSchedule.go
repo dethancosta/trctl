@@ -7,7 +7,7 @@ import (
 	"os"
 	"strings"
 
-	tr "github.com/dethancosta/tr-cli/utils"
+	tr "github.com/dethancosta/trctl/utils"
 	"github.com/spf13/cobra"
 )
 

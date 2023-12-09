@@ -1,9 +1,6 @@
-/*
-Copyright © 2023 NAME HERE <EMAIL ADDRESS>
-*/
 package main
 
-import "github.com/dethancosta/tr-cli/cmd"
+import "github.com/dethancosta/trctl/cmd"
 
 func main() {
 	cmd.Execute()

@@ -11,10 +11,9 @@ import (
 	"strings"
 	"time"
 
-	tr "github.com/dethancosta/tr-cli/utils"
+	tr "github.com/dethancosta/trctl/utils"
 	"github.com/spf13/cobra"
 )
-
 
 var updateCmd = &cobra.Command{
 	Use:   "update",
@@ -88,8 +87,8 @@ given tasks`,
 				}
 				tasks = append(tasks, tr.Task{
 					Description: desc,
-					StartTime:       start,
-					EndTime:         end,
+					StartTime:   start,
+					EndTime:     end,
 					Tag:         tag,
 				})
 			}
@@ -99,7 +98,7 @@ given tasks`,
 		if err != nil {
 			fmt.Println("Error marshalling request: ", err)
 		}
-		
+
 		resp, err := http.Post(
 			serverUrl+"/update",
 			"application/json",

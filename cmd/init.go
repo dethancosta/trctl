@@ -7,7 +7,7 @@ import (
 	"io"
 	"os"
 
-	tr "github.com/dethancosta/tr-cli/utils"
+	tr "github.com/dethancosta/trctl/utils"
 	"github.com/muesli/go-app-paths"
 	"github.com/spf13/cobra"
 )
@@ -15,36 +15,36 @@ import (
 var initCmd = &cobra.Command{
 	Use:   "init",
 	Short: "Initialize a config file and schedule build file",
-	Long: `Initialize a config file and schedule build file for using tr-cli with a timerule server.
-$ tr-cli init --server <server> --username <username> --password <password> --build <buildfile>
+	Long: `Initialize a config file and schedule build file for using trctl with a timerule server.
+$ trctl init --server <server> --username <username> --password <password> --build <buildfile>
 Username, password and buildfile are optional.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		scope := gap.NewScope(gap.User, "timeruler")
 		configDir := tr.GetConfigDir()
-		
+
 		err = os.MkdirAll(configDir, 0755)
 		if err != nil {
 			fmt.Println("Error creating config directory: ", err.Error())
 		}
 
 		// TODO conditional error handling
-		_, err = os.OpenFile(configDir + "/config.json", os.O_RDWR, 0644)
+		_, err = os.OpenFile(configDir+"/config.json", os.O_RDWR, 0644)
 		if err == nil {
 			fmt.Println("Config file already exists. Use config command instead")
 			os.Exit(1)
 		}
 
 		if buildFile == "" {
-			buildFile, err  = scope.DataPath("build.csv")
+			buildFile, err = scope.DataPath("build.csv")
 			if err != nil {
 				buildFile = ""
 			}
 		}
 		config := map[string]string{
-			"server": serverUrl,
-			"user": user,
+			"server":   serverUrl,
+			"user":     user,
 			"password": password,
-			"build": buildFile,
+			"build":    buildFile,
 		}
 		configBytes, err := json.Marshal(config)
 		if err != nil {
@@ -52,7 +52,6 @@ Username, password and buildfile are optional.`,
 			os.Exit(1)
 		}
 
-		
 		configFile, err := os.Create(configDir + "/config.json")
 		if err != nil {
 			fmt.Println("Error creating config file: ", err.Error())

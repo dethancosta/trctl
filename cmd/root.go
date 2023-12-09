@@ -8,15 +8,15 @@ import (
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "tr-cli",
+	Use:   "trctl",
 	Short: "CLI client for a timeruler server",
-	Long: `tr-cli is a CLI client for a timeruler server. It is used to
+	Long: `trctl is a CLI client for a timeruler server. It is used to
 get, update, and build schedules.`,
 }
 
 var (
-	user string
-	password string
+	user      string
+	password  string
 	serverUrl string
 	buildFile string
 
