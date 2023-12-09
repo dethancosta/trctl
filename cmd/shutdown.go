@@ -6,8 +6,6 @@ package cmd
 import (
 	"fmt"
 	"os"
-	"strconv"
-	"syscall"
 
 	tr "github.com/dethancosta/tr-cli/utils"
 	"github.com/spf13/cobra"
@@ -20,28 +18,12 @@ var shutdownCmd = &cobra.Command{
 	Long: `Shutdown a local timeruler server running as a daemon.`,
 	Run: func(cmd *cobra.Command, args []string) {
 
-		pidStr, ok := tr.GetConfig()["pid"]
-		if !ok {
-			fmt.Println("No pid found. Are you sure you're running a local server?")
-			os.Exit(1)
-		}
-		pid, err := strconv.Atoi(pidStr)
-		if err != nil {
-			fmt.Println("Couldn't get pid from config file: ", err.Error())
-			os.Exit(1)
-		}
-		err = syscall.Kill(pid, syscall.SIGINT)
-		if err != nil {
-			fmt.Println("Couldn't send kill signal: ", err.Error())
-			os.Exit(1)
-		}
-
 		err = tr.RemovePid()
 		if err != nil {
 			fmt.Println("Couldn't remove pid: ", err.Error())
 			os.Exit(1)
 		}
-		fmt.Printf("Process killed at pid %d\n", pid)
+		fmt.Printf("Process killed\n")
 	},
 }
 
