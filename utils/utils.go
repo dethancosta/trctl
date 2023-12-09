@@ -9,6 +9,7 @@ import (
 	"os"
 	"strings"
 	"strconv"
+	"syscall"
 	"time"
 
 	"github.com/muesli/go-app-paths"
@@ -18,6 +19,51 @@ var (
 	DefaultServerUrl = "http://localhost:6576"
 	configPath       = GetConfigPath()
 )
+
+func RemovePid() error {
+	var config map[string]string
+
+	if configPath == "" {
+		return errors.New("No config path found.")
+	}
+
+	file, err := os.OpenFile(configPath, os.O_RDWR|os.O_TRUNC, 0644)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	fileContents, err := io.ReadAll(file)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(fileContents, &config)
+	if err != nil {
+		return fmt.Errorf("Unable to read config file contents: %w", err)
+	}
+	pidStr, ok := config["pid"]
+
+	if !ok {
+		return errors.New("No pid found")
+	}
+	pid, err := strconv.Atoi(pidStr)
+	if err != nil {
+		return fmt.Errorf("Couldn't get pid from file: %w", err)
+	}
+	err = syscall.Kill(pid, syscall.SIGINT)
+	if err != nil {
+		return fmt.Errorf("Couldn't send kill signal: %w", err)
+	}
+	delete(config, "pid")
+	fileContents, err = json.Marshal(config)
+	if err != nil {
+		return fmt.Errorf("Error while marshalling new contents: %w", err)
+	}
+	_, err = file.Write(fileContents)
+
+	return err
+}
 
 func GetConfig() map[string]string {
 	config := make(map[string]string)

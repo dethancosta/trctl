@@ -19,8 +19,6 @@ var shutdownCmd = &cobra.Command{
 	Short: "Shutdown a local timeruler server",
 	Long: `Shutdown a local timeruler server running as a daemon.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		// TODO delete this line
-		fmt.Println("shutdown called")
 
 		pidStr, ok := tr.GetConfig()["pid"]
 		if !ok {
@@ -33,6 +31,16 @@ var shutdownCmd = &cobra.Command{
 			os.Exit(1)
 		}
 		err = syscall.Kill(pid, syscall.SIGINT)
+		if err != nil {
+			fmt.Println("Couldn't send kill signal: ", err.Error())
+			os.Exit(1)
+		}
+
+		err = tr.RemovePid()
+		if err != nil {
+			fmt.Println("Couldn't remove pid: ", err.Error())
+			os.Exit(1)
+		}
 		fmt.Printf("Process killed at pid %d\n", pid)
 	},
 }
