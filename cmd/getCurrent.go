@@ -11,7 +11,7 @@ import (
 )
 
 var getCurrentCmd = &cobra.Command{
-	Use:   "getCurrent",
+	Use:   "getcurr",
 	Short: "Get the current task",
 	Long:  `Send a request to the server to get the current task.`,
 	Run: func(cmd *cobra.Command, args []string) {

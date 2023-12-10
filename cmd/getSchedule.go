@@ -12,7 +12,7 @@ import (
 )
 
 var getScheduleCmd = &cobra.Command{
-	Use:   "getSchedule",
+	Use:   "getsched",
 	Short: "Get today's schedule",
 	Long:  `Send a request to the timeruler server to get today's schedule as a formatted string.`,
 	Run: func(cmd *cobra.Command, args []string) {

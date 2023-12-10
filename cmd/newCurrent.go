@@ -11,7 +11,7 @@ import (
 )
 
 var newCurrentCmd = &cobra.Command{
-	Use:   "newCurrent",
+	Use:   "newcurr",
 	Short: "Update the current task",
 	Long: `Send a request to the timeruler server to update the 
 current task until a given time.`,
