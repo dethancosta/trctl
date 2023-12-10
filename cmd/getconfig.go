@@ -1,6 +1,5 @@
 /*
 Copyright © 2023 NAME HERE <EMAIL ADDRESS>
-
 */
 package cmd
 
@@ -15,7 +14,7 @@ import (
 var getconfigCmd = &cobra.Command{
 	Use:   "getconfig",
 	Short: "Print the contents of the timeruler config file",
-	Long: `Print the contents of the config file. Format is a pretty-printed json object.`,
+	Long:  `Print the contents of the config file. Format is a pretty-printed json object.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		// TODO delete this line
 		fmt.Println("getconfig called")
@@ -25,7 +24,7 @@ var getconfigCmd = &cobra.Command{
 			fmt.Println("No config file found.")
 		} else {
 			fmt.Println("{")
-			for k,v := range config {
+			for k, v := range config {
 				fmt.Printf("\t\"%s\": \"%s\"\n", k, v)
 			}
 			fmt.Println("}")
