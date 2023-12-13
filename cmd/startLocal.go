@@ -9,11 +9,11 @@ import (
 
 var startlocalCmd = &cobra.Command{
 	Use:   "startlcl",
-	Short: "Start a local timeruler server (requires `timeruler`)",
+	Short: "Start a local timeruler server (requires `tr-server`)",
 	Long: `Start a timeruler server on your local machine. Uses port 6576,
 and requires that you have timeruler installed on your PATH`,
 	Run: func(cmd *cobra.Command, args []string) {
-		exc := exec.Command("timeruler", "-sa", "true", "&")
+		exc := exec.Command("tr-server", "-sa", "true", "&")
 		err := exc.Start()
 
 		if err != nil {
