@@ -32,7 +32,7 @@ func RemovePid() error {
 	}
 	pid, err := strconv.Atoi(pidStr)
 	if err != nil {
-		return fmt.Errorf("Couldn't get pid from file: %w", err)
+		return fmt.Errorf("Couldn't get pid from file at %s: %w", configPath, err)
 	}
 	err = syscall.Kill(pid, syscall.SIGINT)
 	if err != nil {
@@ -61,7 +61,16 @@ func GetConfig() map[string]string {
 	}
 
 	file, err := os.Open(configPath)
-	if err != nil {
+	if errors.Is(err, os.ErrNotExist) {
+		err = os.Mkdir(GetConfigDir(), os.ModePerm)
+		if err != nil {
+			return config
+		}
+		file, err = os.Open(configPath)
+		if err != nil {
+			return config
+		}
+	} else if err != nil {
 		return config
 	}
 	defer file.Close()

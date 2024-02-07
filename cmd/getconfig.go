@@ -16,9 +16,10 @@ var getconfigCmd = &cobra.Command{
 	Short: "Print the contents of the timeruler config file",
 	Long:  `Print the contents of the config file. Format is a pretty-printed json object.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		// TODO delete this line
-		fmt.Println("getconfig called")
+<<<<<<< HEAD
 
+=======
+>>>>>>> 4ab76e2645474f0525e1748c963182e535b42f53
 		config := tr.GetConfig()
 		if config == nil || len(config) == 0 {
 			fmt.Println("No config file found.")
