@@ -17,7 +17,10 @@ var getconfigCmd = &cobra.Command{
 	Long:  `Print the contents of the config file. Format is a pretty-printed json object.`,
 	Run: func(cmd *cobra.Command, args []string) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 
+=======
+>>>>>>> 4ab76e2645474f0525e1748c963182e535b42f53
 =======
 >>>>>>> 4ab76e2645474f0525e1748c963182e535b42f53
 		config := tr.GetConfig()
