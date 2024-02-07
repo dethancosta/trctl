@@ -24,7 +24,7 @@ func RemovePid() error {
 	config := GetConfig()
 
 	if config == nil {
-		return errors.New("Could not open config file")
+		return fmt.Errorf("Could not open config file at %s", configPath)
 	}
 	pidStr, ok := config["pid"]
 	if !ok {
@@ -36,7 +36,7 @@ func RemovePid() error {
 	}
 	err = syscall.Kill(pid, syscall.SIGINT)
 	if err != nil {
-		return fmt.Errorf("Couldn't send kill signal: %w", err)
+		return fmt.Errorf("Couldn't send kill signal (config file %s): %w", configPath, err)
 	}
 	delete(config, "pid")
 	fileContents, err := json.Marshal(config)
