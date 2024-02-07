@@ -16,13 +16,6 @@ var getconfigCmd = &cobra.Command{
 	Short: "Print the contents of the timeruler config file",
 	Long:  `Print the contents of the config file. Format is a pretty-printed json object.`,
 	Run: func(cmd *cobra.Command, args []string) {
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-=======
->>>>>>> 4ab76e2645474f0525e1748c963182e535b42f53
-=======
->>>>>>> 4ab76e2645474f0525e1748c963182e535b42f53
 		config := tr.GetConfig()
 		if config == nil || len(config) == 0 {
 			fmt.Println("No config file found.")
@@ -38,14 +31,4 @@ var getconfigCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(getconfigCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// getconfigCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// getconfigCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
