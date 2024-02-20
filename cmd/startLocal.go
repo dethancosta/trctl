@@ -13,7 +13,7 @@ var startlocalCmd = &cobra.Command{
 	Long: `Start a timeruler server on your local machine. Uses port 6576,
 and requires that you have timeruler installed on your PATH`,
 	Run: func(cmd *cobra.Command, args []string) {
-		exc := exec.Command("tr-server", "-sa", "true", "&")
+		exc := exec.Command("tr-server", "-sa", "true", "-n", ntfyId, "&")
 		err := exc.Start()
 
 		if err != nil {
@@ -22,6 +22,10 @@ and requires that you have timeruler installed on your PATH`,
 	},
 }
 
+var ntfyId string
+
 func init() {
 	rootCmd.AddCommand(startlocalCmd)
+
+	startlocalCmd.Flags().StringVarP(&ntfyId, "ntfyId", "n", "", "ntfy.sh url path")
 }
